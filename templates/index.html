@@ -10,5 +10,18 @@
         <input type="file" name="file" accept=".csv">
         <input type="submit" value="Uploader">
     </form>
+
+    <form method="POST" action="/train">
+        <label for="model">Model:</label>
+        <select name="model">
+            <option value="linear">Linear Regression</option>
+            <option value="random_forest">Random Forest</option>
+        </select>
+        <input type="submit" value="Entraîner">
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
 </body>
 </html>
