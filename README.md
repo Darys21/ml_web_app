@@ -1,61 +1,84 @@
-# ML Model Training Web Application
+# MLFlowApp - Application de Formation de Modèles ML
 
-This project is a web application for managing and training machine learning models, developed by ANGUILET Joan-yves Darys.
+Cette application web permet de gérer et d'entraîner des modèles de machine learning sur des données de traduction texte.
 
-## Project Overview
+## Fonctionnalités
 
-The application provides a user-friendly interface for:
-- Uploading machine learning datasets
-- Training ML models on the uploaded data
-- Visualizing training results and model performance
+- **Gestion des données**
+  - Upload de fichiers CSV contenant des paires de traduction (texte source → texte cible)
+  - Support des fichiers CSV avec les colonnes 'input' et 'target'
 
-## Technical Stack
+- **Entraînement des modèles**
+  - Choix entre différents algorithmes de ML :
+    - Régression Linéaire
+    - Random Forest
+  - Interface web intuitive pour sélectionner le modèle
+  - Sauvegarde automatique des modèles entraînés
 
-- **Backend**: Python (Flask)
-- **Version Control**: Git & GitHub
-- **ML Data/Model Versioning**: DVC
-- **CI/CD**: Jenkins
-- **Storage**: Google Cloud Platform
+- **Visualisation des résultats**
+  - Affichage des métriques de performance
+  - Génération de graphiques comparatifs
+  - Interface de visualisation interactive
 
-## Features
+## Structure du Projet
 
-1. **Data Management**
-   - Upload ML datasets (CSV format supported)
-   - Data version control using DVC
-   - Remote storage integration with Google Drive
+```
+.
+├── app.py              # Point d'entrée de l'application Flask
+├── data/               # Dossier pour les fichiers CSV
+├── models/            # Dossier pour les modèles sauvegardés
+├── static/            # Fichiers statiques (CSS, images)
+├── templates/         # Templates HTML
+└── requirements.txt   # Dépendances Python
+```
 
-2. **Model Training**
-   - Support for multiple ML algorithms:
-     - Linear Regression
-     - SVM
-     - Random Forest
-   - Model versioning with DVC
-   - Performance metrics visualization using Flask templates
+## Installation
 
-3. **CI/CD Pipeline**
-   - Automated testing with Jenkins
-   - Model training validation
-   - Test reporting and monitoring
+1. Créer un environnement virtuel :
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
 
-## Project Structure
+2. Installer les dépendances :
+```bash
+pip install -r requirements.txt
+```
 
-The project follows a Flask application structure:
-- `/app` - Main application directory
-  - `/templates` - Flask HTML templates
-  - `/static` - CSS, JavaScript, and static files
-  - `/models` - ML model implementations
-  - `/utils` - Helper functions and utilities
-- Data and models tracked with DVC
-- Continuous Integration through Jenkins pipelines
+3. Initialiser DVC pour la gestion des données :
+```bash
+dvc init
+dvc add data
+```
 
-## Getting Started
+## Utilisation
 
-[Installation and setup instructions will be added]
+1. Lancer l'application :
+```bash
+python app.py
+```
 
-## Documentation
+2. Accéder à l'interface web :
+```
+http://localhost:5000
+```
 
-[Detailed documentation will be added]
+3. Suivre ces étapes :
+   - Uploader un fichier CSV
+   - Sélectionner un modèle
+   - Entraîner le modèle
+   - Voir les résultats
 
-## Contributing
+## Technologies Utilisées
 
-[Contribution guidelines will be added]
+- Backend: Flask
+- Versioning: DVC
+- ML: Scikit-learn
+- Visualisation: Matplotlib
+
+## Notes
+
+- Les fichiers de données sont suivis avec DVC pour une meilleure gestion des versions
+- Les modèles entraînés sont sauvegardés dans le dossier 'models/'
+- Les résultats de l'entraînement sont visualisés via une interface web interactive
