@@ -1,0 +1,14 @@
+<!-- templates/results.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MLFlowApp - Résultats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>MLFlowApp - Résultats de l'entraînement</h1>
+    <p><strong>{{ metric_name }} :</strong> {{ metric_value }}</p>
+    <img src="{{ url_for('static', filename='plot.png') }}" alt="Graphique des résultats">
+    <p><a href="/">Retour à l'accueil</a></p>
+</body>
+</html>

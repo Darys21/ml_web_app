@@ -1,17 +1,22 @@
-from flask import Flask, render_template, request 
+from flask import Flask, render_template, request
 import os 
 import joblib
 import pandas as pd 
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import mean_squared_error, accuracy_score
 import re 
+import joblib 
+import matplotlib.pyplot as plt
 
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'data'
 MODEL_FOLDER = 'models'
+STATIC_FOLDER = 'static'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(MODEL_FOLDER, exist_ok=True)
+os.makedirs(STATIC_FOLDER, exist_ok=True)
 
 
 
@@ -72,6 +77,48 @@ def list_files():
     """
     files = os.listdir(UPLOAD_FOLDER)
     return render_template('data.html', files=files)
+
+@app.route('/results')
+def show_results():
+    """ affiche les résultats de l'entrainement """
+    csv_file = os.listdir(UPLOAD_FOLDER)[0]
+    file_path = os.path.join(UPLOAD_FOLDER, csv_file)
+    data = pd.read_csv(file_path)
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+    
+    # charge le dernier  modèle entrainé (supposons le plus récent dans models/)
+    model_files = os.listdir(MODEL_FOLDER)
+    if not model_files: 
+        return " Aucun modèle entrainé", 400
+    model_path = os.path.join(MODEL_FOLDER, model_files[-1])
+    model = joblib.load(model_path)
+
+    # Prédictions 
+    y_pred = model.predict(X)
+
+    # calcul de la métrique 
+    if 'linear' in model_path:
+        metric_name = "Erreur quadratique moyenne (MSE)"
+        metric_value = mean_squared_error(y, y_pred)
+    else:
+        metric_name = "Précision"
+        metric_value = accuracy_score (y, y_pred)
+
+    # génération d'une visalisation 
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y, y_pred, color='blue', label='Prédictions vs Réel')
+    plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--', lw=2, label='Idéal')
+    plt.xlabel('Valeurs réelles')
+    plt.ylabel('Valeurs prédites')
+    plt.legend()
+    plot_path = os.path.join(STATIC_FOLDER, 'plot.png')
+    plt.savefig(plot_path)
+    plt.close()
+
+    return render_template('results.html', metric_name=metric_name, metric_value=metric_value, plot_path=plot_path)
+
+
 
 
 
